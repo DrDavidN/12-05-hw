@@ -137,20 +137,62 @@ spec:
 
 #### Ответ:
 
+Проверяю что Ingress-controller запущен
+
+![image](https://github.com/DrDavidN/12-05-hw/assets/128225763/b303de27-2622-4612-8e29-1a661d0ec1d5)
 
 2. Создать Ingress, обеспечивающий доступ снаружи по IP-адресу кластера MicroK8S так, чтобы при запросе только по адресу открывался _frontend_ а при добавлении /api - _backend_.
 
 #### Ответ:
 
+Создал ingress.yaml, применил его и проверил
+
+![image](https://github.com/DrDavidN/12-05-hw/assets/128225763/d6412f33-9c62-400e-a577-d2e34f0a225c)
 
 3. Продемонстрировать доступ с помощью браузера или `curl` с локального компьютера.
 
 #### Ответ:
+
+``` curl http://myingress.ru ```
+
+![image](https://github.com/DrDavidN/12-05-hw/assets/128225763/b6f0b056-45c6-4ecd-b124-3cc9c181e697)
+
+``` curl http://myingress.ru/api ```
+
+![image](https://github.com/DrDavidN/12-05-hw/assets/128225763/417f19a9-663f-44ae-a697-a3d2c017ebaa)
 
 
 4. Предоставить манифесты и скриншоты или вывод команды п.2.
 
 #### Ответ:
 
+``` YAML
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: 12-05-hw
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: myingress.ru
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontback-service
+            port:
+              number: 9001
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: frontback-service
+            port:
+              number: 9002
+```
 
 ------
